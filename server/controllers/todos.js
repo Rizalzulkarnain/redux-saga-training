@@ -30,11 +30,6 @@ exports.getTodos = async (req, res) => {
     });
 
     const response = await getPagingData(todo, page, limit);
-    res.status(200).json({
-      success: true,
-      count: response.length,
-      data: response,
-    });
 
     if (!response) {
       res.status(404).json({
@@ -42,6 +37,12 @@ exports.getTodos = async (req, res) => {
         message: `Todo not found with id of ${req.params.id}`,
       });
     }
+
+    res.status(200).json({
+      success: true,
+      count: response.length,
+      data: response,
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -60,7 +61,7 @@ exports.singleTodo = async (req, res) => {
       data: todo,
     });
   } catch (error) {
-    Response.status(500).json({
+    res.status(500).json({
       success: false,
       error: error.message || `Error retrieving Tutorial with id: ${id}`,
     });
@@ -76,6 +77,14 @@ exports.addTodo = async (req, res) => {
     };
 
     const addTodo = await Todo.create(todo);
+
+    if (!addTodo) {
+      res.status.json({
+        success: false,
+        message: 'error when adding todo!',
+      });
+    }
+
     res.status(201).json({
       success: true,
       data: addTodo,
@@ -135,41 +144,6 @@ exports.deleteTodo = async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message || `Could not delete Tutorial with id=${id}`,
-    });
-  }
-};
-
-exports.deleteAllTodo = async (req, res) => {
-  try {
-    await Todo.destroy({ where: {}, truncate: false });
-    res.status(200).json({
-      success: true,
-      data: {},
-    });
-  } catch (error) {
-    res.status(500).json({
-      succes: false,
-      error:
-        error.message || `Some error occurred while removing all tutorials.`,
-    });
-  }
-};
-
-exports.getAllDoneTodo = async (req, res) => {
-  try {
-    const allTodoDone = await Todo.findAll({ where: { done: true } });
-
-    if (!allTodoDone) {
-      res.status(404).json({
-        success: false,
-        message: `Cannot find Todo is done. Maybe was not found!`,
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      succes: false,
-      error:
-        error.message || `Some error occurred while retrieving todo is done.`,
     });
   }
 };
