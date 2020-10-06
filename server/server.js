@@ -48,9 +48,9 @@ app.use(xss());
 const rateLimitDelay = 10 * 1000;
 const limiter = rateLimit({
   windowMs: rateLimitDelay,
-  max: 5,
+  max: 10,
 });
-app.use(limiter); //10 seconde - 5 request API
+app.use(limiter); //10 seconde - 10 request API
 app.use(hpp());
 
 // connect to SQL

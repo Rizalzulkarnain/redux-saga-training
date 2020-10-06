@@ -4,7 +4,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import FormikControl from '../../utils/formikContainer/FormikControl';
 
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { createTodo } from '../../redux/actions/todoActions';
 
 import {
@@ -15,7 +15,9 @@ import {
   ButtonSpan,
 } from '../../styles';
 
-const FormTodo = ({ createTodo }) => {
+const FormTodo = () => {
+  const dispatch = useDispatch();
+
   const initialValues = {
     title: '',
     description: '',
@@ -32,7 +34,7 @@ const FormTodo = ({ createTodo }) => {
 
   const onSubmit = (values, { resetForm }) => {
     if (createTodo) {
-      createTodo(values);
+      dispatch(createTodo(values));
       swal('Submit form is Success!', '', 'success');
     } else {
       swal('Please check your connection!', '', 'error');
@@ -85,6 +87,4 @@ const FormTodo = ({ createTodo }) => {
   );
 };
 
-export default connect(({ todos }) => ({ todos }), {
-  createTodo,
-})(FormTodo);
+export default FormTodo;

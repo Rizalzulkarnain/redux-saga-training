@@ -1,12 +1,12 @@
-import { all, takeLatest, put, fork } from 'redux-saga/effects';
+import { delay, all, takeLatest, put, fork } from 'redux-saga/effects';
 import * as services from '../services/todoService';
 import * as Type from '../constants/todoTypes';
 import * as actions from '../actions/todoActions';
-import { push } from 'connected-react-router';
 
 //Fetch Todos
 function* getTodos() {
   try {
+    delay(1000);
     const { data } = yield services.getTodosServices();
     if (data) {
       yield put(actions.getTodosSuccess({ items: data }));
@@ -14,7 +14,7 @@ function* getTodos() {
   } catch (error) {
     yield put(
       actions.getTodosFailure({
-        error: error.message || `error retrieving data from server`,
+        error: error.message,
       })
     );
   }
@@ -28,12 +28,12 @@ function* watchGetTodosSagas() {
 function* getTodo({ payload: { id } }) {
   try {
     const { data } = yield services.getTodoServices(id);
-
+    console.log(data);
     if (data) {
       yield put(actions.getSingleTodoSuccess({ item: data }));
     }
   } catch (error) {
-    yield put(Type.FETCH_TODO_FAILURE({ error: error.message }));
+    yield put(actions.getSingleTodoFailure({ error: error.message }));
   }
 }
 
@@ -49,7 +49,6 @@ function* createTodo({ payload }) {
 
     if (data) {
       yield put(actions.createTodoSuccess());
-      yield put(push('/'));
     }
   } catch (error) {
     yield put(Type.CREATE_TODO_FAILURE({ error: error.message }));
@@ -64,7 +63,6 @@ function* watchCreateTodoSagas() {
 function* deleteTodo({ payload }) {
   try {
     yield services.deleteTodoServices(payload);
-    // yield put(push('/'));
     yield getTodos();
   } catch (error) {
     yield put(Type.DELETE_TODO_FAILURE({ error: error.message }));
@@ -79,8 +77,6 @@ function* watchDeleteTodoSagas() {
 function* updateTodo({ payload: { id, body } }) {
   try {
     yield services.updateTodosServices(id, body);
-
-    yield put(push('/'));
   } catch (error) {
     yield put(Type.UPDATE_TODO_FAILURE({ error: error.message }));
   }

@@ -4,13 +4,18 @@ import TodoItem from './TodoItem';
 import { DivContainer, TodolistContainer, SearchContainer } from '../../styles';
 
 const Todolist = ({ todos }) => {
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log('Search Data ...');
+  };
+
   return (
     <DivContainer>
       <SearchContainer>
-        <form>
+        <form onSubmit={onSubmit}>
           <input type="text" />{' '}
           <span>
-            <button>Seacrh</button>
+            <button type="submit">Seacrh</button>
           </span>
         </form>
       </SearchContainer>

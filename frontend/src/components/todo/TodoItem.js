@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { deleteTodo } from '../../redux/actions/todoActions';
 
@@ -15,14 +15,14 @@ import {
 
 const TodoItem = ({ todo }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleClickDelete = (id) => {
     dispatch(deleteTodo(id));
-    console.log(deleteTodo(id));
   };
 
-  const handleClickUpdate = () => {
-    console.log('Update');
+  const handleChangeRoute = (id) => {
+    history.push(`/edit/${id}`);
   };
 
   return (
@@ -33,7 +33,9 @@ const TodoItem = ({ todo }) => {
       <Title>{todo.title}</Title>
       <Description>{todo.description}</Description>
       <DivLeft>
-        <ButtonCard onClick={() => handleClickUpdate()}>Update</ButtonCard>
+        <ButtonCard onClick={() => handleChangeRoute(todo.id)}>
+          Update
+        </ButtonCard>
       </DivLeft>
       <DivRight>
         <ButtonCard onClick={() => handleClickDelete(todo.id)}>
@@ -44,4 +46,4 @@ const TodoItem = ({ todo }) => {
   );
 };
 
-export default TodoItem;
+export default React.memo(TodoItem);
