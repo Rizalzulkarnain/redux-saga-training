@@ -48,15 +48,15 @@ app.use(xss());
 const rateLimitDelay = 10 * 1000;
 const limiter = rateLimit({
   windowMs: rateLimitDelay,
-  max: 3,
+  max: 5,
 });
-app.use(limiter); //10 seconde - 3 request API
+app.use(limiter); //10 seconde - 5 request API
 app.use(hpp());
 
 // connect to SQL
 //Production
 db.sequelize.sync().then(() => {
-  console.log('Re-Sync DB');
+  console.log('Re-Sync DB...');
 });
 
 // Development;

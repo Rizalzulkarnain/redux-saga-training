@@ -1,37 +1,11 @@
 const db = require('../models');
 const Todo = db.todos;
-const Op = db.sequelize.Op;
-
-const getPagination = (page, size) => {
-  const limit = size ? +size : 4;
-  const offset = page ? page * limit : 0;
-
-  return { limit, offset };
-};
-
-const getPagingData = (data, page, limit) => {
-  const { count: totalItems, rows: todos } = data;
-  const currentPage = page ? +page : 1;
-  const totalPages = Math.ceil(totalItems / limit);
-
-  return { totalItems, todos, totalPages, currentPage };
-};
 
 exports.getTodos = async (req, res) => {
   try {
-    const { page, size, title } = req.query;
-    const condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-    const { limit, offset } = getPagination(page, size);
+    const todos = await Todo.findAll();
 
-    const todo = await Todo.findAndCountAll({
-      where: condition,
-      limit,
-      offset,
-    });
-
-    const response = await getPagingData(todo, page, limit);
-
-    if (!response) {
+    if (!todos) {
       res.status(404).json({
         success: false,
         message: `Todo not found with id of ${req.params.id}`,
@@ -40,8 +14,7 @@ exports.getTodos = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      count: response.length,
-      data: response,
+      data: todos,
     });
   } catch (error) {
     res.status(500).json({

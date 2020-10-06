@@ -32,11 +32,6 @@ module.exports = (sequelize, Sequelize) => {
         },
         field: 'description',
       },
-      done: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
     },
     {
       freezeTableName: true,
