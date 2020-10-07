@@ -8,6 +8,7 @@ function* getTodos() {
   try {
     delay(1000);
     const { data } = yield services.getTodosServices();
+
     if (data) {
       yield put(actions.getTodosSuccess({ items: data }));
     }
@@ -76,7 +77,12 @@ function* watchDeleteTodoSagas() {
 //Update Todo
 function* updateTodo({ payload: { id, body } }) {
   try {
-    yield services.updateTodosServices(id, body);
+    const { data } = yield services.updateTodoServices(id, body);
+    console.log(data);
+
+    if (data) {
+      yield put(actions.updateTodoSuccess(id, body));
+    }
   } catch (error) {
     yield put(actions.updateTodoFailure({ error: error.message }));
   }

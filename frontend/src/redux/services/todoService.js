@@ -10,5 +10,5 @@ export const addTodoServices = (body) => API(TODO_URL, 'POST', body);
 
 export const deleteTodoServices = (id) => API(`${TODO_URL}/${id}`, 'DELETE');
 
-export const updateTodosServices = (id, body) =>
+export const updateTodoServices = (id, body) =>
   API(`${TODO_URL}/${id}`, 'PUT', body);

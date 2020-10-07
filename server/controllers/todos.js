@@ -71,10 +71,15 @@ exports.addTodo = async (req, res) => {
 
 exports.updateTodo = async (req, res) => {
   try {
-    const id = req.params.id;
-    const updateTodo = await Todo.update(req.body, {
-      where: { id: id },
-    });
+    const { id } = req.params;
+    const todo = {
+      title: req.body.title,
+      description: req.body.description,
+    };
+    const updateTodo = await Todo.update(
+      { todo },
+      { returning: true, where: { id: id } }
+    );
 
     if (!updateTodo) {
       res.status(404).json({
@@ -84,9 +89,10 @@ exports.updateTodo = async (req, res) => {
       });
     }
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
-      data: updateTodo,
+      update: updateTodo,
+      data: todo,
     });
   } catch (error) {
     res.status(500).json({

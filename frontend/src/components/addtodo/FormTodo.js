@@ -35,7 +35,7 @@ const FormTodo = () => {
 
     setTimeout(() => {
       history.push('/');
-    }, 4000);
+    }, 3500);
   };
 
   return (

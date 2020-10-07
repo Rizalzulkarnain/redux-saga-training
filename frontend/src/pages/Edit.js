@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import swal from 'sweetalert';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
@@ -20,18 +21,24 @@ import {
 } from '../styles';
 
 let mounted = false;
+
 const Edit = () => {
   const { register, handleSubmit, setValue, errors } = useForm({
     defaultValues: {},
   });
 
   const dispatch = useDispatch();
-  const { data, isLoading, error } = useSelector(({ todos }) => todos);
+  const { item, isLoading, error } = useSelector(({ todos }) => todos);
   const { id } = useParams();
 
-  const onSubmit = (body) => {
+  const onSubmit = (data) => {
     mounted = false;
-    dispatch(updateTodo({ id, body: { body } }));
+    if (data) {
+      dispatch(updateTodo({ id, data: { data } }));
+      swal(`Your data is Uptodate`, '', 'success');
+    } else {
+      swal(`${error.message}!`, '', 'error');
+    }
   };
 
   useEffect(() => {
@@ -39,10 +46,10 @@ const Edit = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    setValue('title', data.title);
-    setValue('description', data.description);
+    setValue('title', item.title);
+    setValue('description', item.description);
     mounted = true;
-  }, [data, setValue]);
+  }, [item, setValue]);
 
   if (isLoading && mounted) return <Spinner />;
   if (error) return <p>{error}</p>;
@@ -60,7 +67,7 @@ const Edit = () => {
                 name="title"
                 id="title"
                 placeholder="input your title..."
-                ref={register({ required: true, min: 6 })}
+                ref={register({ type: 'custom' }, { required: true, min: 6 })}
               />
             </div>
           </FormGroup>
@@ -74,7 +81,7 @@ const Edit = () => {
                 name="description"
                 id="description"
                 placeholder="input your description..."
-                ref={register({ required: true, min: 6 })}
+                ref={register({ type: 'custom' }, { required: true, min: 6 })}
               />
             </div>
           </FormGroup>
@@ -86,7 +93,7 @@ const Edit = () => {
 
           <ButtonContainer>
             <Button type="submit">
-              <ButtonSpan>submit</ButtonSpan>
+              <ButtonSpan>Save</ButtonSpan>
             </Button>
           </ButtonContainer>
         </form>

@@ -67,7 +67,6 @@ export default function todosReducer(state = initialState, { type, payload }) {
         isLoading: false,
         error: payload.error,
       };
-
     default:
       return state;
   }

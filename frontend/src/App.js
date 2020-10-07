@@ -32,7 +32,7 @@ const App = () => {
               <Route path="/todos" component={Todo} />
               <Route path="/addtodo" component={AddTodo} />
               <Route path="/about" component={About} />
-              <Route path="/edit" component={Edit} />
+              <Route path="/edit/:id" component={Edit} />
             </Layout>
           </Suspense>
         </Switch>
