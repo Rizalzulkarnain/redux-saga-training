@@ -51,7 +51,7 @@ function* createTodo({ payload }) {
       yield put(actions.createTodoSuccess());
     }
   } catch (error) {
-    yield put(Type.CREATE_TODO_FAILURE({ error: error.message }));
+    yield put(actions.createTodoFailure({ error: error.message }));
   }
 }
 
@@ -78,7 +78,7 @@ function* updateTodo({ payload: { id, body } }) {
   try {
     yield services.updateTodosServices(id, body);
   } catch (error) {
-    yield put(Type.UPDATE_TODO_FAILURE({ error: error.message }));
+    yield put(actions.updateTodoFailure({ error: error.message }));
   }
 }
 

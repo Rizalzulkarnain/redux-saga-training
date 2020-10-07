@@ -39,10 +39,19 @@ export const DivContainer = styled.div`
   }
 `;
 
+export const FormContainer = styled.div`
+  display: grid;
+  justify-content: center;
+`;
+
 export const FormGroup = styled.div`
   position: relative;
   margin-top: 2.25rem;
-  margin-bottom: 2.25rem;
+  margin-bottom: 1rem;
+`;
+
+export const Paragraph = styled.div`
+  color: red;
 `;
 
 export const ButtonContainer = styled.div`

@@ -1,15 +1,14 @@
+const dotenv = require('dotenv');
+dotenv.config({ path: './config/config.env' });
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
 
 //security
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
-
-dotenv.config({ path: './config/config.env' });
 
 const db = require('./models');
 
@@ -52,6 +51,8 @@ const limiter = rateLimit({
 });
 app.use(limiter); //10 seconde - 10 request API
 app.use(hpp());
+
+app.use(express.static(__dirname));
 
 // connect to SQL
 //Production

@@ -1,90 +1,89 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import FormikControl from '../../utils/formikContainer/FormikControl';
 
+//redux
 import { useDispatch } from 'react-redux';
 import { createTodo } from '../../redux/actions/todoActions';
 
 import {
   DivContainer,
+  FormContainer,
   FormGroup,
+  Paragraph,
   ButtonContainer,
   Button,
   ButtonSpan,
 } from '../../styles';
 
 const FormTodo = () => {
-  const dispatch = useDispatch();
-
-  const initialValues = {
-    title: '',
-    description: '',
-  };
-
-  const validationSchema = Yup.object({
-    title: Yup.string()
-      .min(6, 'Too Short!')
-      .required('Please..., input title field!'),
-    description: Yup.string()
-      .min(6, 'Too Short!')
-      .required('Please..., input description field!'),
+  const { register, handleSubmit, errors } = useForm({
+    defaultValues: {},
   });
 
-  const onSubmit = (values, { resetForm }) => {
-    if (createTodo) {
-      dispatch(createTodo(values));
-      swal('Submit form is Success!', '', 'success');
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const onSubmit = (data) => {
+    if (!data) {
+      swal('please check your connection!', '', 'error');
     } else {
-      swal('Please check your connection!', '', 'error');
+      dispatch(createTodo(data));
+      swal(`Submit Form is Success`, '', 'success');
     }
 
-    resetForm({ values: '' });
+    setTimeout(() => {
+      history.push('/');
+    }, 4000);
   };
 
   return (
     <DivContainer>
       <h1>What Do You want to do ?</h1>
-      <div>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => {
-            return (
-              <Form>
-                <FormGroup>
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="What do you want todo ?"
-                    name="title"
-                  />
-                </FormGroup>
+      <FormContainer>
+        <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+          <FormGroup>
+            <label htmlFor="title">Tittle: </label>
+            <div>
+              <input
+                type="text"
+                name="title"
+                id="title"
+                placeholder="input your title..."
+                ref={register({ required: true, min: 6 })}
+              />
+            </div>
+          </FormGroup>
+          {errors.title && <Paragraph>Title is required...!</Paragraph>}
 
-                <FormGroup>
-                  <FormikControl
-                    control="input"
-                    type="text"
-                    label="Add description !"
-                    name="description"
-                  />
-                </FormGroup>
+          <FormGroup>
+            <label htmlFor="description">Description: </label>
+            <div>
+              <input
+                type="text"
+                name="description"
+                id="description"
+                placeholder="input your description..."
+                ref={register({ required: true, min: 6 })}
+              />
+            </div>
+          </FormGroup>
+          {errors.description && (
+            <div>
+              <Paragraph>Description is required...!</Paragraph>
+            </div>
+          )}
 
-                <ButtonContainer>
-                  <Button type="submit" disabled={!formik.isValid}>
-                    <ButtonSpan>Do It !</ButtonSpan>
-                  </Button>
-                </ButtonContainer>
-              </Form>
-            );
-          }}
-        </Formik>
-      </div>
+          <ButtonContainer>
+            <Button type="submit">
+              <ButtonSpan>submit</ButtonSpan>
+            </Button>
+          </ButtonContainer>
+        </form>
+      </FormContainer>
     </DivContainer>
   );
 };
 
-export default FormTodo;
+export default React.memo(FormTodo);

@@ -6,8 +6,3 @@ export const TodolistContainer = styled.div`
   grid-gap: 5px;
   padding-bottom: 30px;
 `;
-
-export const SearchContainer = styled.div`
-  display: grid;
-  justify-content: center;
-`;

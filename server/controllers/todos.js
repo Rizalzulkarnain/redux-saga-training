@@ -46,7 +46,6 @@ exports.addTodo = async (req, res) => {
     const todo = {
       title: req.body.title,
       description: req.body.description,
-      done: req.body.done ? req.body.done : false,
     };
 
     const addTodo = await Todo.create(todo);
