@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { deleteTodo } from '../../redux/actions/todoActions';
 
@@ -21,21 +21,17 @@ const TodoItem = ({ todo }) => {
     dispatch(deleteTodo(id));
   };
 
-  const handleChangeRoute = (id) => {
-    history.push(`/edit/${id}`);
-  };
-
   return (
     <TodoItemWrapper>
       <Circle>
         <h2>{todo.id}</h2>
       </Circle>
       <Title>{todo.title}</Title>
-      <Description>{todo.description}</Description>
+      <Link to={`http://localhost:5000/api/v1/todos/${todo.id}`}>
+        <Description>{todo.description}</Description>
+      </Link>
       <DivLeft>
-        <ButtonCard onClick={() => handleChangeRoute(todo.id)}>
-          Update
-        </ButtonCard>
+        <ButtonCard>Update</ButtonCard>
       </DivLeft>
       <DivRight>
         <ButtonCard onClick={() => handleClickDelete(todo.id)}>

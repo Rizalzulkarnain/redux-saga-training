@@ -12,8 +12,14 @@ export default function todosReducer(state = initialState, { type, payload }) {
     case Type.FETCH_TODOS:
     case Type.FETCH_TODO:
     case Type.CREATE_TODO:
-    case Type.UPDATE_TODO:
     case Type.DELETE_TODO:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+
+    case Type.UPDATE_TODO:
       return {
         ...state,
         isLoading: true,
@@ -36,6 +42,12 @@ export default function todosReducer(state = initialState, { type, payload }) {
 
     case Type.CREATE_TODO_SUCCESS:
     case Type.DELETE_TODO_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+      };
+
     case Type.UPDATE_TODO_SUCCESS:
       return {
         ...state,
@@ -60,13 +72,20 @@ export default function todosReducer(state = initialState, { type, payload }) {
       };
 
     case Type.CREATE_TODO_FAILURE:
-    case Type.UPDATE_TODO_FAILURE:
     case Type.DELETE_TODO_FAILURE:
       return {
         ...state,
         isLoading: false,
         error: payload.error,
       };
+
+    case Type.UPDATE_TODO_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        error: payload.error,
+      };
+
     default:
       return state;
   }

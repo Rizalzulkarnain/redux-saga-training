@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import swal from 'sweetalert';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 
 import Spinner from '../components/spinner/Spinner';
 
@@ -22,19 +21,19 @@ import {
 
 let mounted = false;
 
-const Edit = () => {
+const Edit = ({ match }) => {
   const { register, handleSubmit, setValue, errors } = useForm({
     defaultValues: {},
   });
 
   const dispatch = useDispatch();
   const { item, isLoading, error } = useSelector(({ todos }) => todos);
-  const { id } = useParams();
+  const { id } = match.params;
 
   const onSubmit = (data) => {
     mounted = false;
     if (data) {
-      dispatch(updateTodo({ id, data: { data } }));
+      dispatch(updateTodo({ id, item: { data } }));
       swal(`Your data is Uptodate`, '', 'success');
     } else {
       swal(`${error.message}!`, '', 'error');
